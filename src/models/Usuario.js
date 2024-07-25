@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
-const UsuarioSchema = new mongoose.Schema({
+const usuarioSchema = new mongoose.Schema({
     id: { type: mongoose.Schema.Types.ObjectId },
     nome: { type: String, required: true },
     email: { type: String, required: true },
-}, {versionKey: false});
+}, { versionKey: false });
 
-const usuario = mongoose.model("Usuario", UsuarioSchema);
+const usuario = mongoose.model("usuarios", usuarioSchema);
 
-export { usuario, UsuarioSchema };
+export { usuario, usuarioSchema };

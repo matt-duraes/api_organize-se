@@ -1,9 +1,9 @@
 import tarefa from "../models/Tarefa.js";
-
+import {usuario} from "../models/Usuario.js";
 class TarefaController {
     static async listarTarefas(req, res) {
         try {
-            const listaTarefas = await tarefa.find({});
+            const listaTarefas = await tarefa.find({}).populate("usuario").exec();
             res.status(200).json(listaTarefas);
         } catch (erro) {
             res.status(500).json({message: `${erro.message} falha ao buscar tarefas`});
@@ -45,6 +45,16 @@ class TarefaController {
             await tarefa.findByIdAndDelete(id);
             res.status(200).json({message: "Tarefa deletada com sucesso"});
         } catch (erro) {
+            res.status(500).json({message: `${erro.message} falha ao deletar tarefa`});
+        }
+    }
+
+    static async listarTarefasPorUsuario(req, res) {
+        const usuario = req.query.usuario;
+        try {
+            const tarefasPorUsuario = await tarefa.find({usuario: usuario});
+            res.status(200).json(tarefasPorUsuario);
+        } catch (error) {
             res.status(500).json({message: `${erro.message} falha ao deletar tarefa`});
         }
     }
