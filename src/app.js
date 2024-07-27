@@ -15,10 +15,8 @@ conexao.once("open", () => {
 const app = express();
 routes(app);
 
-app.delete("/tarefas/:id", (req, res) => {
-    const index = buscaTarefa(req.params.id);
-    tarefas.splice(index, 1);
-    res.status(200).json(tarefas);
+app.use((erro, req, res, next) => {
+    res.status(500).json({message: `Erro interno do servidor ${erro.message} `});  
 })
 
 export default app;
