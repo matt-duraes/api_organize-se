@@ -1,51 +1,51 @@
 import {usuario} from "../models/Usuario.js";
 
 class UsuarioController {
-    static async listarUsuarios(req, res) {
+    static async listarUsuarios(req, res, next) {
         try {
             const listaUsuarios = await usuario.find({});
             res.status(200).json(listaUsuarios);
         } catch (erro) {
-            res.status(500).json({message: `${erro.message} falha ao buscar usuarios`});
+            next(erro);
         }
     }
 
-    static async listarUsuarioPorId(req, res) {
+    static async listarUsuarioPorId(req, res, next) {
         try {
             const id = req.params.id;
             const usuarioEncontrada = await usuario.findById(id);
             res.status(200).json(usuarioEncontrada);
         } catch (erro) {
-            res.status(500).json({message: `${erro.message} falha ao buscar usuario`});
+            next(erro);
         }
     }
 
-    static async editarUsuarioPorId(req, res) {
+    static async editarUsuarioPorId(req, res, next) {
         try {
             const id = req.params.id;
             await usuario.findByIdAndUpdate(id, req.body);
             res.status(200).json({message: "Usuario atualizado com sucesso"});
         } catch (erro) {
-            res.status(500).json({message: "Falha na atualização da usuario"});
+            next(erro);
         }
     }
 
-    static async cadastrarUsuario(req, res) {
+    static async cadastrarUsuario(req, res, next) {
         try {
             const novaUsuario = await usuario.create(req.body);
             res.status(201).json({message: "Usuario cadastrada com sucesso", usuario: novaUsuario});
         } catch(erro) {
-            res.status(500).json({message: `${erro.message} falha ao cadastrar usuario`});
+            next(erro);
         }
     }
 
-    static async deletarUsuarioPorId(req, res) { 
+    static async deletarUsuarioPorId(req, res, next) { 
         try {
             const id = req.params.id;
             await usuario.findByIdAndDelete(id);
             res.status(200).json({message: "Usuario deletada com sucesso"});
         } catch (erro) {
-            res.status(500).json({message: `${erro.message} falha ao deletar usuario`});
+            next(erro);
         }
     }
 }

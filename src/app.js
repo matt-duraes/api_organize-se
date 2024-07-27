@@ -1,6 +1,8 @@
 import express from 'express';
 import dbConnect from './config/dbConnect.js';
 import routes from './routes/index.js';
+import manipuladorDeErros from './middlewares/manipuladorDeErros.js';
+import manipulador404 from './middlewares/manipulador404.js';
 
 const conexao = await dbConnect();
 
@@ -13,10 +15,11 @@ conexao.once("open", () => {
 });
 
 const app = express();
+app.use(express.json());
 routes(app);
 
-app.use((erro, req, res, next) => {
-    res.status(500).json({message: `Erro interno do servidor ${erro.message} `});  
-})
+app.use(manipulador404)
+
+app.use(manipuladorDeErros)
 
 export default app;
